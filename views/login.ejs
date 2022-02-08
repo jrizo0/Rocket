@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Información legible por el navegador, idioma etc... -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titulo de la Pestana -->
+    <title>Rocket | Gaming platform</title>
+
+    <link rel="icon" href="img/Logo.png" type="image/png" />
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preload" href="stylesheets/styles.css" as="style">
+    <script src="https://kit.fontawesome.com/18cfddf396.js" crossorigin="anonymous"></script>
+    <link href="stylesheets/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img style="width:120px; height:70px;" src="img/logo.png">
+        </div>
+        <div class="presentacion">
+            <h1 class="titulo">Rocket | <span class="subti">Comunidad gamer</span> </h1>
+        </div>
+        <div class="btn-login-registro">
+            <a class="boton boton-75" href="login">Iniciar sesión</a>
+            <a class="boton boton-75" href="registro">Registrarse</a>
+        </div>
+    </header>
+
+
+    
+    <div class="nav-bg">
+        <nav class="navegacion contenedor">
+            <!-- Menu navegacion -->
+            <a href="/">Home</a>
+            <a href="tienda">Tienda</a>
+            <a href="sobreNosotros">Sobre nosotros</a>
+            <a href="noticias">Noticias</a>
+            <a href="donacion">Proyectos Para Donar</a>
+        </nav>
+    </div>
+
+
+    <main class="contenedor">
+        <section class="login">
+                <form class="box" action="/auth" method="POST">
+                    <h2>Iniciar sesión</h2>
+                    <input type="text" name="user" placeholder="Nombre de usuario" >
+                    <input type="password" name="pass" placeholder="Contraseña" >
+                    <input class="" type="submit" name="" value="Iniciar Sesión">    
+        </section>
+    </main>
+
+    
+    <footer>
+        <section class="contenedor">
+            <p>Copyright © Todos los derechos reservados Rocket 2020 </p>
+        </section>
+    </footer>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <% if(typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %> ,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+        <% } %>
+
+</body>
+
+</html>

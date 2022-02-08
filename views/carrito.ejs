@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Información legible por el navegador, idioma etc... -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titulo de la Pestana -->
+    <title>Rocket | Gaming platform</title>
+
+    <link rel="icon" href="img/Logo.png" type="image/png" />
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preload" href="stylesheets/styles.css" as="style">
+    <script src="https://kit.fontawesome.com/18cfddf396.js" crossorigin="anonymous"></script>
+    <link href="stylesheets/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+
+<body>
+    <header>
+        <div class="body logo">
+            <img style="width:120px; height:70px;" src="img/logo.png">
+        </div>
+        <div class="presentacion">
+            <h1 class="titulo">Rocket | <span class="subti">Comunidad gamer</span> </h1>
+        </div>
+
+        <% if (login) { %>
+            <div class="sesion-activa">
+                <div class="nombre-usuario"> <%= name %> </div>
+                
+                <a href="logout" class="boton boton-75 logout">Logout</a>
+            </div>
+            <div class="btn-carrito">
+                <a class="boton boton-75" href="carrito">Carrito</a>
+            </div>
+
+        <%} else { %>
+            <div class="btn-login-registro">
+                <a class="boton boton-75" href="login">Iniciar sesión</a>
+                <a class="boton boton-75" href="registro">Registrarse</a>
+            </div>
+        <% } %>
+
+        <!-- <div class="btn-carrito">
+            <a class="boton boton-75" href="index.html">Home</a>
+        </div> -->
+
+    </header>
+
+    <div class="nav-bg">
+        <nav class="navegacion contenedor">
+            <!-- Menu navegacion -->
+            <a href="/">Home</a>
+            <a href="tienda">Tienda</a>
+            <a href="sobreNosotros">Sobre nosotros</a>
+            <a href="noticias">Noticias</a>
+            <a href="donacion">Proyectos Para Donar</a>
+        </nav>
+    </div>
+
+    <div class="contenedor-carrito">
+        <div class="row">
+            <!-- Elementos generados a partir del JSON -->
+            <main id="items" class="col-sm-6 row">
+                <% for(let i = 0; i < listaCarritoActual.length; i++){ %>
+                    <form class="juego" action="/eliminar-Juego" method="POST"> 
+                        <div class="card col-sm-5">
+                            <div class="card-body">
+                                <img class="img-fluid" src=<%= listaCarritoActual[i].imagen %> >
+                                <h5 class="card-title"><%= listaCarritoActual[i].nombre %></h5>
+                                <input type="hidden" id="id" name="idJuego" value="<%= listaCarritoActual[i].id %>">
+                                <p class="card-text"><%= new Intl.NumberFormat('es-CO', { style: "currency", currency: "COP" }).format(listaCarritoActual[i].precio) %></p>
+                                <button class="btn btn-primary" type="submit" id="borrarJuego" marcador="1">Eliminar</button>
+                            </div>
+                        </div>    
+                    </form> 
+                <% } %>
+                
+            </main>
+            <!-- Carrito -->
+            <aside class="col-sm-4">
+                <h2>Carrito</h2>
+                <!-- Elementos del carrito -->
+                <ul id="carrito" class="list-group"></ul>
+                <hr>
+                <!-- Precio total -->
+                <p class="text-right">Total: <span id="total"><%= new Intl.NumberFormat('es-CO', { style: "currency", currency: "COP" }).format(totalCarritoActual) %></span> COP</p>
+                <% if(listaCarritoActual.length>0) { %>
+                <form action="/vaciar-Carrito" method="POST">
+                    <button id="boton-vaciar" type="submit" class="boton boton-75">Vaciar</button>
+                </form>
+                <form action="/pago-Carrito" method="POST">
+                    <button id="boton-pagar" type="submit" class="boton boton-75">Pagar</button>
+                </form>
+                <% } %>
+            </aside>
+        </div>
+    </div>
+
+
+    <!-- <script>
+        window.onload = function () {
+            // Variables
+            /* var baseDeDatos = listaJuegosJason ; */
+            const baseDeDatos = [
+                {
+                    id: 1,
+                    nombre: 'Fifa 2021',
+                    precio: 86000,
+                    imagen: 'img/fifa.jpeg'
+                },
+                {
+                    id: 2,
+                    nombre: 'Among Us',
+                    precio: 10000,
+                    imagen: 'img/among.jpeg'
+                },
+                {
+                    id: 3,
+                    nombre: 'Minecraft',
+                    precio: 105000,
+                    imagen: 'img/minecraft.jpg'
+                },
+                {
+                    id: 4,
+                    nombre: 'Inside',
+                    precio: 50000,
+                    imagen: 'img/inside.jpg'
+                }
+            ];
+            let carrito = []; //listaCarrito
+            let total = 0;
+            const DOMitems = document.querySelector('#items');
+            const DOMcarrito = document.querySelector('#carrito');
+            const DOMtotal = document.querySelector('#total');
+            const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+            const DOMbotonPagar = document.querySelector('#boton-pagar');
+            const miLocalStorage = window.localStorage;
+
+            // Funciones
+            /**
+            * Dibuja todos los productos a partir de la base de datos. No confundir con el carrito
+            */
+            function renderizarProductos() {
+                baseDeDatos.forEach((info) => {
+                    // Estructura
+                    const miNodo = document.createElement('div');
+                    miNodo.classList.add('card', 'col-sm-5');
+                    // Body
+                    const miNodoCardBody = document.createElement('div');
+                    miNodoCardBody.classList.add('card-body');
+                    // Titulo
+                    const miNodoTitle = document.createElement('h5');
+                    miNodoTitle.classList.add('card-title');
+                    miNodoTitle.textContent = info.nombre;
+                    // Imagen
+                    const miNodoImagen = document.createElement('img');
+                    miNodoImagen.classList.add('img-fluid');
+                    miNodoImagen.setAttribute('src', info.imagen);
+                    // Precio
+                    const miNodoPrecio = document.createElement('p');
+                    miNodoPrecio.classList.add('card-text');
+                    miNodoPrecio.textContent = info.precio + '$';
+                    // Boton 
+                    const miNodoBoton = document.createElement('button');
+                    miNodoBoton.classList.add('btn', 'btn-primary');
+                    miNodoBoton.textContent = 'Añadir';
+                    miNodoBoton.setAttribute('marcador', info.id);
+                    miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                    // Insertamos
+                    miNodoCardBody.appendChild(miNodoImagen);
+                    miNodoCardBody.appendChild(miNodoTitle);
+                    miNodoCardBody.appendChild(miNodoPrecio);
+                    miNodoCardBody.appendChild(miNodoBoton);
+                    miNodo.appendChild(miNodoCardBody);
+                    DOMitems.appendChild(miNodo);
+                });
+            }
+
+            /**
+            * Evento para añadir un producto al carrito de la compra
+            */
+            function anyadirProductoAlCarrito(evento) {
+                // Anyadimos el Nodo a nuestro carrito
+
+                carrito.push(evento.target.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Actualizamos el carrito 
+                renderizarCarrito();
+                // Actualizamos el LocalStorage
+                guardarCarritoEnLocalStorage();
+            }
+            function anyadirProductoAlCarrito(evento) {
+                // Anyadimos el Nodo a nuestro carrito
+                carrito.push(evento.target.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Actualizamos el carrito 
+                renderizarCarrito();
+                // Actualizamos el LocalStorage
+                guardarCarritoEnLocalStorage();
+            }
+
+            /**
+            * Dibuja todos los productos guardados en el carrito
+            */
+            function renderizarCarrito() {
+                // Vaciamos todo el html
+                DOMcarrito.textContent = '';
+                // Quitamos los duplicados
+                const carritoSinDuplicados = [...new Set(carrito)];
+                // Generamos los Nodos a partir de carrito
+                carritoSinDuplicados.forEach((item) => {
+                    // Obtenemos el item que necesitamos de la variable base de datos
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                        // ¿Coincide las id? Solo puede existir un caso
+                        return itemBaseDatos.id === parseInt(item);
+                    });
+                    // Cuenta el número de veces que se repite el producto
+                    const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+                        // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+                        return itemId === item ? total += 1 : total;
+                    }, 0);
+                    // Creamos el nodo del item del carrito
+                    const miNodo = document.createElement('li');
+                    miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
+                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio} COP`;
+                    // Boton de borrar
+                    const miBoton = document.createElement('button');
+                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                    miBoton.textContent = 'X';
+                    miBoton.style.marginLeft = '1rem';
+                    miBoton.dataset.item = item;
+                    miBoton.addEventListener('click', borrarItemCarrito);
+                    // Mezclamos nodos
+                    miNodo.appendChild(miBoton);
+                    DOMcarrito.appendChild(miNodo);
+                });
+            }
+
+            /**
+            * Evento para borrar un elemento del carrito
+            */
+            function borrarItemCarrito(evento) {
+                // Obtenemos el producto ID que hay en el boton pulsado
+                const id = evento.target.dataset.item;
+                // Borramos todos los productos
+                carrito = carrito.filter((carritoId) => {
+                    return carritoId !== id;
+                });
+                // volvemos a renderizar
+                renderizarCarrito();
+                // Calculamos de nuevo el precio
+                calcularTotal();
+                // Actualizamos el LocalStorage
+                guardarCarritoEnLocalStorage();
+            }
+
+            /**
+            * Calcula el precio total teniendo en cuenta los productos repetidos
+            */
+            function calcularTotal() {
+                // Limpiamos precio anterior
+                total = 0;
+                // Recorremos el array del carrito
+                carrito.forEach((item) => {
+                    // De cada elemento obtenemos su precio
+                    const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                        return itemBaseDatos.id === parseInt(item);
+                    });
+                    total = total + miItem[0].precio;
+                });
+                // Renderizamos el precio en el HTML
+                DOMtotal.textContent = total.toFixed(2);
+            }
+
+            /**
+            * Varia el carrito y vuelve a dibujarlo
+            */
+            function vaciarCarrito() {
+                // Limpiamos los productos guardados
+                carrito = [];
+                // Renderizamos los cambios
+                renderizarCarrito();
+                calcularTotal();
+                // Borra LocalStorage
+                localStorage.clear();
+
+            }
+            function pagarCarrito() {
+                Swal.fire({
+                    title: "Pago exitoso",
+                    text: "¡PAGO REALIZADO!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location = ''
+                })
+                vaciarCarrito();
+            }
+
+            function guardarCarritoEnLocalStorage() {
+                miLocalStorage.setItem('carrito', JSON.stringify(carrito));
+            }
+
+            function cargarCarritoDeLocalStorage() {
+                // ¿Existe un carrito previo guardado en LocalStorage?
+                if (miLocalStorage.getItem('carrito') !== null) {
+                    // Carga la información
+                    carrito = JSON.parse(miLocalStorage.getItem('carrito'));
+                }
+            }
+
+            // Eventos
+            DOMbotonVaciar.addEventListener('click', vaciarCarrito);
+            DOMbotonPagar.addEventListener('click', pagarCarrito);
+            // Inicio
+            cargarCarritoDeLocalStorage();
+            renderizarProductos();
+            calcularTotal();
+            renderizarCarrito();
+        }
+
+    </script> -->
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <% if(typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %> ,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
+
+</body>
+
+</html>

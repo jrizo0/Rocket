@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Información legible por el navegador, idioma etc... -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titulo de la Pestana -->
+    <title>Rocket | Gaming platform</title>
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    
+    <link rel="icon" href="img/Logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preload" href="stylesheets/styles.css" as="style">
+    <link href="stylesheets/styles.css" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/18cfddf396.js" crossorigin="anonymous"></script>
+
+
+    <link href="stylesheets/styles.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/18cfddf396.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img style="width:120px; height:70px;" src="img/logo.png">
+        </div>
+        <div class="presentacion">
+            <h1 class="titulo">Rocket | <span class="subti">Comunidad gamer</span> </h1>
+        </div>
+
+        <% if (login) { %>
+            <div class="sesion-activa">
+                <div class="nombre-usuario"> <%= name %> </div>
+                
+                <a href="logout" class="boton boton-75 logout">Logout</a>
+            </div>
+            <div class="btn-carrito">
+                <a class="boton boton-75" href="carrito">Carrito</a>
+            </div>
+            <div class="btn-perfil">
+                <a class="boton boton-75" href="perfil">Mi Perfil</a>
+            </div>
+        <%} else { %>
+            <div class="btn-login-registro">
+                <a class="boton boton-75" href="login">Iniciar sesión</a>
+                <a class="boton boton-75" href="registro">Registrarse</a>
+            </div>
+        <% } %>
+
+        
+
+    </header>
+
+    <div class="nav-bg">
+        <nav class="navegacion contenedor">
+            <!-- Menu navegacion -->
+            <a href="/">Home</a>
+            <a href="tienda">Tienda</a>
+            <a href="sobreNosotros">Sobre nosotros</a>
+            <a href="noticias">Noticias</a>
+            <a href="donacion">Proyectos Para Donar</a>
+        </nav>
+    </div>
+
+    <section class="rocket3">
+        <div class="contenido-rocket">
+            <h2>Descubre nuevos proyectos para apoyar</h2>
+
+            <a class="boton" href="noticias">Explorar</a>
+        </div>
+
+    </section>
+
+
+   
+
+    <main class="contenedor-tienda">
+
+
+        <div class="box ">
+            <div class="container-1">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" id="search" placeholder="Buscar..." />
+            </div>
+        </div>
+
+        
+        <div class="tiendatodo">
+            
+            <div class="contenedor sombra">
+               
+                <section class="ofertas">
+                    <h2 class="titulo">Proyectos en tendencia</h2>
+                    <li>
+                    <% listaProximamente.forEach(function(juego) { %>
+                        <a>
+                            <h3 class="titulo"><%= juego.nombre %></h3>
+                            <form action="/visualizar-Juego" method="POST">
+                                <input type="hidden" id="id" name="idJuego" value="<%= juego.id %>">
+                                <input class="inputImagen" type="image" name="submit" src= <%= juego.imagen %> >
+                            </form>
+                            <span class="precio" ><%= juego.progreso %>% Progreso</span>
+                        </a>
+                    <% }); %>
+                </li>
+                    
+                        <!-- <a>
+                            <h3 class="titulo" >Blasphemous 2</h3>
+                            <img src="img/blasphemous.jpg">
+                            <span class="precio" >30% Progreso</span>
+                        </a>
+                        <a>
+                            <h3 class="titulo" >Terraria</h3>
+                            <img src="img/terraria.jpg">
+                            <span class="precio" >55% Progreso</span>
+                        </a>
+                        <a>
+                            <h3 class="titulo" >Undertale</h3>
+                            <img src="img/undertale.jpg">
+                            <span class="precio" >15% Progreso</span>
+                        </a> -->
+                    
+        
+                </section>
+        
+                <section class="ofertas">
+                    <h2 class="titulo">Proyectos nuevos</h2>
+                    <li>
+                        <a>
+                            <h3 class="titulo" >Cuphead</h3>
+                            <img src="img/cuphead.jpg">
+                            <span class="precio" >60% Progreso</span>
+                        </a>
+                        <a>
+                            <h3 class="titulo" >Hades</h3>
+                            <img src="img/hades.jpg">
+                            <span class="precio" >45% Progreso</span>
+                        </a>
+                        <a>
+                            <h3 class="titulo" >Amnesia - the dark descent</h3>
+                            <img src="img/amnesia.jpg">
+                            <span class="precio" >5% Progreso</span>
+                        </a>
+                    </li>
+        
+                </section>
+
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/Entrega 2/Rocket/jquery.js"></script>
+    </main>

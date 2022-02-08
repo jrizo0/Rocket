@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Información legible por el navegador, idioma etc... -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titulo de la Pestana -->
+    <title>Rocket | Gaming platform</title>
+    <script src="Js/Rocket.js"></script>
+    <link rel="icon" href="img/Logo.png" type="image/png" />
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preload" href="stylesheets/styles.css" as="style">
+    <script src="https://kit.fontawesome.com/18cfddf396.js" crossorigin="anonymous"></script>
+    <link href="stylesheets/styles.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img style="width:120px; height:70px;" src="img/logo.png">
+        </div>
+        <div class="presentacion">
+            <h1 class="titulo">Rocket | <span class="subti">Comunidad gamer</span> </h1>
+        </div>
+
+        <% if (login) { %>
+            <div class="sesion-activa">
+                <div class="nombre-usuario"> <%= name %> </div>
+                
+                <a href="logout" class="boton boton-75 logout">Logout</a>
+            </div>
+            <div class="btn-carrito">
+                <a class="boton boton-75" href="carrito">Carrito</a>
+            </div>
+            <div class="btn-perfil">
+                <a class="boton boton-75" href="perfil">Mi Perfil</a>
+            </div>
+        <%} else { %>
+            <div class="btn-login-registro">
+                <a class="boton boton-75" href="login">Iniciar sesión</a>
+                <a class="boton boton-75" href="registro">Registrarse</a>
+            </div>
+        <% } %>
+
+    </header>
+
+    <div class="nav-bg">
+        <nav class="navegacion contenedor">
+            <!-- Menu navegacion -->
+            <a href="/">Home</a>
+            <a href="tienda">Tienda</a>
+            <a href="sobreNosotros">Sobre nosotros</a>
+            <a href="noticias">Noticias</a>
+            <a href="donacion">Proyectos Para Donar</a>
+        </nav>
+    </div>
+
+
+    <section class="rocket">
+        <div class="contenido-rocket">
+
+
+            <h2>Descubre las ultimas novedades</h2>  
+            <a class="boton" href="noticias">Explorar</a>
+
+
+
+        </div>
+
+    </section>
+
+    
+
+<div class="todo">
+    
+    <main class="contenedor sombra">
+
+        <section>
+
+            <div class="comentarios">
+                <div class="fotousu">
+                    <img src="img/Iconoperf.jpg" alt="">
+                </div>
+                <textarea  name="" id="caja" cols="90" rows="10"></textarea>
+                <nav>
+                    <a><i class="fas izquierdo fa-images"></i> Fotos</a>
+                    <a><i class="fas izquierdo fa-video"></i> Videos</a>
+                    <a><i class="fas izquierdo fa-icons"></i> Emojis</a>
+                </nav>
+            </div>
+
+        </section>
+
+        <section class="ofertas">
+            <h2 class="titulo">Promociones</h2>
+            <li>
+                <% listaPromociones.forEach(function(juegoActual) { %>
+                    <a>
+                        <h3 class="titulo"><%= juegoActual.nombre %></h3>
+                        <form action="/visualizar-Juego" method="POST">
+                            <input type="hidden" id="id" name="idJuego" value="<%= juegoActual.id %>">
+                            <input class="inputImagen" type="image" name="submit" src= <%= juegoActual.imagen %> >
+                            <!-- <img alt="submit" src=  juego.imagen > -->
+                        </form>
+                        <span id="precio" class="precio"> <%= new Intl.NumberFormat('es-CO', { style: "currency", currency: "COP" }).format(juegoActual.precio*juegoActual.promocion/100) %> </span>
+                    </a>
+                <% }); %>
+            </li>
+
+        </section>
+
+        <section class="destacados">    
+            <h2 class="titulo">Destacados</h2>
+            <div class="carrusel">
+                <ul>
+                    <% for(let i = 0; i < listaDestacados.length; i++){ %>
+                        <li id="slide<%= i%>">
+                            <!-- <h3>slide<%= i%></h3> -->
+                            <form action="/visualizar-Juego" method="POST">
+                                <input type="hidden" id="id" name="idJuego" value="<%= listaDestacados[i].id %>">
+                                <input class="inputImagenCarrusel" type="image" name="submit" src= <%= listaDestacados[i].imagen %> >
+                            </form>
+                            <!-- <img src="<%= listaDestacados[i].imagen%>" /> -->
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </section>
+
+        <section class="ofertas">
+            <h2 class="titulo">Proximamente</h2>
+            <li>
+                <% listaProximamente.forEach(function(juegoActual) { %>
+                    <a>
+                        <h3 class="titulo"><%= juegoActual.nombre %></h3>
+                        <form action="/visualizar-Juego" method="POST">
+                            <input type="hidden" id="id" name="idJuego" value="<%= juegoActual.id %>">
+                            <input class="inputImagen" type="image" name="submit" src= <%= juegoActual.imagen %> >
+                        </form>
+                        <!-- <img src= <%= juegoActual.imagen %> > -->
+                        <span id="precio" class="precio">PROXIMAMENTE</span>
+                    </a>
+                <% }); %>
+            </li>
+        </section>
+
+    </main>
+</div>
+    <section class="contenedor contacto">
+        <h2>Contactanos</h2>
+        <form class="formulario" action="/send-email" method="POST" >
+            <fieldset>
+                <legend>Contactános llenando los campos</legend>
+                <div class="contenedor-campos">
+                    <div class="campo">
+                        <label>Nombre</label>
+                        <input class="input-text" type="text" name="nombre" placeholder="Tu nombre">
+                    </div>
+
+                    <div class="campo">
+                        <label>Apellido</label>
+                        <input class="input-text" type="text" name="apellido" placeholder="Tu apellido">
+                    </div>
+
+                    <div class="campo">
+                        <label>Correo electronico</label>
+                        <input class="input-text" type="text" name="correo" placeholder="tu@correo.com">
+                    </div>
+
+                    <div class="campo">
+                        <label for="problema">Seleccione su problema:</label>
+
+                        <!-- Lista de posibles problemas de contacto -->
+                        <select class="input-text" name="problema" id="problema">
+                            <option class="input-text" value="-">-</option>
+                            <option class="input-text" value="Pago">Problema con pago</option>
+                            <option class="input-text" value="Donación">Problema con donacion</option>
+                            <option class="input-text" value="Bug">Bugs en un juego</option>
+                            <option class="input-text" value="Descargas">No puedo descargar mi juego</option>
+                            <option class="input-text" value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label>Describa su problema</label>
+                        <textarea class="input-text" name="descripcion" id="" cols="60" rows="5"></textarea>
+                    </div>
+
+
+                </div>
+
+                <div class="enviar">
+                    <input class="boton" type="submit" value="Enviar">
+                </div>
+
+
+            </fieldset>
+        </form>
+    </section>
+
+    <footer>
+
+
+        <section class="contenedor">
+
+            <div class="redes">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-instagram" width="40"
+                    height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#fd0061" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <rect x="4" y="4" width="16" height="16" rx="4" />
+                    <circle cx="12" cy="12" r="3" />
+                    <line x1="16.5" y1="7.5" x2="16.5" y2="7.501" />
+                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-facebook" width="40"
+                    height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="40"
+                    height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00bfd8" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+                </svg>
+
+            </div>
+
+
+
+            <section class="contenedor">
+
+                <p>Copyright © Todos los derechos reservados Rocket 2020 </p>
+            </section>
+
+
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <% if(typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %> ,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
+</body>
+
+</html>
